@@ -1,3 +1,8 @@
-#e.g. 
-#from .<Filename> import <Classname1>
-#from .<Filename> import <Classname2>
+"""
+matrixmath
+~~~~~~
+
+The matrixmath package - a Python package project that is intended
+to perform matrix operation.
+
+"""
