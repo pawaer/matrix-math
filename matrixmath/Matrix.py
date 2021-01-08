@@ -1,14 +1,13 @@
 class Matrix:
 
     def __init__(self, rowCount, columnCount, initialValue=0):
-
         """ Creating Matrix with of certain size with predefined initializer value
 
         Attributes:
             rowCount (int) representing the number of rows
             columnCount (int) representing the number of rows
             initialValue (float) the initial value. If not set it is 0
-            """
+        """
 
         self.rowCount = rowCount
         self.columnCount = columnCount
@@ -18,7 +17,6 @@ class Matrix:
             rowCount, columnCount, initialValue))
 
     def printAllValues(self):
-
         """ Function to print all values of the matrix. Just for deeper debugging
         Args:
             None
