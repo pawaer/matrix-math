@@ -210,7 +210,116 @@ def test_matrix1_EvenMatrix():
     matrix2 = EvenMatrix(5)
 
     with pytest.raises(ValueError):
-        result = Multiplication().operate(matrix1, matrix2)
+        Multiplication().operate(matrix1, matrix2)
+
+
+def test_matrix2_Matrix():
+    """
+    Testing Matrix with Matrix multiplication.
+        - Dimension of resulting matrix shall fit
+        - Resulting object shall be of class Matrix but not of EvenMatrix
+        => Shall raise ValueError
+    """
+    matrix1 = Matrix(3, 2)
+    matrix2 = Matrix(2, 4, -11)
+    expectedResult = Matrix(3, 4)
+
+    #  matrix 1: [3  2]     matrix 2: [1 3 5 7]     expectedResult: [5 9  19 25]
+    #            [5  4]  *            [1 0 2 2]  =                  [9 15 33 43]
+    #            [5  1]                                             [6 15 27 37]
+
+    # matrix1 initialization
+    matrix1.setValue(0, 0, 3)
+    matrix1.setValue(0, 1, 2)
+    matrix1.setValue(1, 0, 5)
+    matrix1.setValue(1, 1, 4)
+    matrix1.setValue(2, 0, 5)
+    matrix1.setValue(2, 1, 1)
+
+    # matrix2 initialization
+    matrix2.setValue(0, 0, 1)
+    matrix2.setValue(0, 1, 3)
+    matrix2.setValue(0, 2, 5)
+    matrix2.setValue(0, 3, 7)
+    matrix2.setValue(1, 0, 1)
+    matrix2.setValue(1, 1, 0)
+    matrix2.setValue(1, 2, 2)
+    matrix2.setValue(1, 3, 2)
+
+    # expectedResult initialization
+    expectedResult.setValue(0, 0, 5.0)
+    expectedResult.setValue(0, 1, 9.0)
+    expectedResult.setValue(0, 2, 19.0)
+    expectedResult.setValue(0, 3, 25.0)
+    expectedResult.setValue(1, 0, 9.0)
+    expectedResult.setValue(1, 1, 15.0)
+    expectedResult.setValue(1, 2, 33.0)
+    expectedResult.setValue(1, 3, 43.0)
+    expectedResult.setValue(2, 0, 6.0)
+    expectedResult.setValue(2, 1, 15.0)
+    expectedResult.setValue(2, 2, 27.0)
+    expectedResult.setValue(2, 3, 37.0)
+
+    result = Multiplication().operate(matrix1, matrix2)
+
+    assert (result.getDimension() == [3, 4])
+    assert (isinstance(result, Matrix)), "Shall be Matrix"
+    assert (not isinstance(result, EvenMatrix)), "Shall not be EvenMatrix"
+    assert (result.isEqualTo(expectedResult))
+
+
+def test_matrix2_EvenMatrix():
+    """
+    Testing EvenMatrix with EvenMatrix multiplication.
+        - Dimension of two matrixes don't fit
+        => Shall raise ValueError
+    """
+    matrix1 = EvenMatrix(3)
+    matrix2 = EvenMatrix(3, -254)
+    expectedResult = EvenMatrix(3)
+
+    #  matrix 1: [3  2   3]     matrix 2: [ 1  3  5]     expectedResult: [-1 0  31]
+    #            [5  4  -1]  *            [ 1  0  2]  =                  [11 18 29]
+    #            [5  1   5]               [-2 -3  4]                     [-4 0  47]
+    # matrix1 initialization
+    matrix1.setValue(0, 0, 3)
+    matrix1.setValue(0, 1, 2)
+    matrix1.setValue(0, 2, 3)
+    matrix1.setValue(1, 0, 5)
+    matrix1.setValue(1, 1, 4)
+    matrix1.setValue(1, 2, -1)
+    matrix1.setValue(2, 0, 5)
+    matrix1.setValue(2, 1, 1)
+    matrix1.setValue(2, 2, 5)
+
+    # matrix2 initialization
+    matrix2.setValue(0, 0, 1)
+    matrix2.setValue(0, 1, 3)
+    matrix2.setValue(0, 2, 5)
+    matrix2.setValue(1, 0, 1)
+    matrix2.setValue(1, 1, 0)
+    matrix2.setValue(1, 2, 2)
+    matrix2.setValue(2, 0, -2)
+    matrix2.setValue(2, 1, -3)
+    matrix2.setValue(2, 2, 4)
+
+    # expectedResult initialization
+    expectedResult.setValue(0, 0, -1)
+    expectedResult.setValue(0, 1, 0)
+    expectedResult.setValue(0, 2, 31)
+    expectedResult.setValue(1, 0, 11)
+    expectedResult.setValue(1, 1, 18)
+    expectedResult.setValue(1, 2, 29)
+    expectedResult.setValue(2, 0, -4)
+    expectedResult.setValue(2, 1, 0)
+    expectedResult.setValue(2, 2, 47)
+
+    result = Multiplication().operate(matrix1, matrix2)
+
+    assert (result.getDimension() == [3, 3])
+    assert (isinstance(result, Matrix)), "Shall be Matrix (parent)"
+    assert (isinstance(result, EvenMatrix)), "Shall be EvenMatrix"
+    assert (result.isEqualTo(expectedResult))
 
 
 def isCorrect(measured, expected, tolerance):

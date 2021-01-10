@@ -31,12 +31,20 @@ class Multiplication:
         if dimFirst[1] != dimSecond[0]:
             raise ValueError("first.column {0} shall be second.row {1}".format(dimFirst[0], dimSecond[1]))
 
-        self.data = [[0 for col in range(dimSecond[1])] for row in range(dimFirst[0])]
+        resultRowCount = dimFirst[0]
+        resultColumnCount = dimSecond[1]
 
-        resultColumnCount = dimFirst[0]
-        resultRowCount = dimSecond[1]
+        if resultColumnCount == resultRowCount:
+            result = EvenMatrix(resultRowCount)
+        else:
+            result = Matrix(resultRowCount, resultColumnCount)
 
-        result = [[0 for col in range(resultColumnCount)] for row in range(resultRowCount)]
+        for thi in range(second.columnCount):
+            for sec in range(first.rowCount):
+                tmpValue = 0.0
+                for one in range(first.columnCount):
+                    tmpValue += first.getValue(sec, one) * second.getValue(one, thi)
+                result.setValue(sec, thi, tmpValue)
 
         return result
 
