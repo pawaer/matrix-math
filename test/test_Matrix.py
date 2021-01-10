@@ -17,3 +17,13 @@ def test_changeValue1():
     assert (matrix.getValue(10, 10) == 100)
     matrix.setValue(39, 39, -10)
     assert (matrix.getValue(39, 39) == -10)
+
+
+def test_dimension1():
+    matrix = Matrix(40, 40, -100)
+    assert (matrix.getDimension() == [40, 40])
+
+
+def test_dimension2():
+    matrix = Matrix(103, 4)
+    assert (matrix.getDimension() == [103, 4])

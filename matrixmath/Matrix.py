@@ -16,20 +16,25 @@ class Matrix:
         print("Created matrix: %drows x %dcolumns with preinitialized value '%.2f'" % (
             rowCount, columnCount, initialValue))
 
-    def printAllValues(self):
-        """ Function to print all values of the matrix. Just for deeper debugging
+    def __repr__(self):
+
+        """Function to output the characteristics of the Gaussian instance
+
         Args:
             None
+
         Returns:
-            None
+            string: characteristics of the Gaussian
+
         """
+
 
         for i in range(self.rowCount):
             for j in range(self.columnCount):
                 print(self.data[i][j], end="\t")  # tab between each row
 
             print('')  # new line
-
+        return "rowSize {}, columnSize {}".format(self.rowCount, self.columnCount)
     def getValue(self, row, column):
         """ Function returns a value of a certain row column pair
         Args:
@@ -54,3 +59,11 @@ class Matrix:
             None
         """
         self.data[row][column] = value
+
+    def getDimension(self):
+        """ Function returns dimension of Matrix
+        Args:
+        Returns:
+            Tuple(row, column
+        """
+        return [self.rowCount, self.columnCount]
