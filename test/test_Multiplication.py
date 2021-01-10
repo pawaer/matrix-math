@@ -163,18 +163,54 @@ def test_scalar3():
                     "row {0} column {1}")
 
 
-def test_general_Matrix():
+def test_general1_Matrix():
+    """
+    Testing scalar multiplication with scalar factor as second argument and Matrix
+        - Scalar factor is allowed only for the first argument yet
+        => Shall raise ValueError
+    """
     matrix1 = Matrix(4, 8)
 
     with pytest.raises(ValueError):
-        result = Multiplication().operate(matrix1, 2)
+        Multiplication().operate(matrix1, 2)
 
 
-def test_general_EvenMatrix():
+def test_general1_EvenMatrix():
+    """
+    Testing scalar multiplication with scalar factor as second argument and EvenMatrix
+        - Scalar factor is allowed only for the first argument yet
+        => Shall raise ValueError
+    """
     matrix1 = EvenMatrix(4)
 
     with pytest.raises(ValueError):
-        result = Multiplication().operate(matrix1, 2)
+        Multiplication().operate(matrix1, 2)
+
+
+def test_matrix1_Matrix():
+    """
+    Testing Matrix with Matrix multiplication.
+        - Dimension of two matrixes don't fit
+        => Shall raise ValueError
+    """
+    matrix1 = Matrix(5, 8)
+    matrix2 = Matrix(7, 5, -11)
+
+    with pytest.raises(ValueError):
+        Multiplication().operate(matrix1, matrix2)
+
+
+def test_matrix1_EvenMatrix():
+    """
+    Testing EvenMatrix with EvenMatrix multiplication.
+        - Dimension of two matrixes don't fit
+        => Shall raise ValueError
+    """
+    matrix1 = EvenMatrix(4)
+    matrix2 = EvenMatrix(5)
+
+    with pytest.raises(ValueError):
+        result = Multiplication().operate(matrix1, matrix2)
 
 
 def isCorrect(measured, expected, tolerance):

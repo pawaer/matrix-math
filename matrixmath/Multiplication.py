@@ -23,9 +23,22 @@ class Multiplication:
 
         return result
 
-    def matrixMultiplication(self, scalarFactor, second, debugTrace):
-        raise NotImplementedError("Not implemented yet")
-        return 0
+    def matrixMultiplication(self, first, second, debugTrace):
+        dimFirst = first.getDimension()
+        dimSecond = second.getDimension()
+
+        # check if multiplication is possible
+        if dimFirst[1] != dimSecond[0]:
+            raise ValueError("first.column {0} shall be second.row {1}".format(dimFirst[0], dimSecond[1]))
+
+        self.data = [[0 for col in range(dimSecond[1])] for row in range(dimFirst[0])]
+
+        resultColumnCount = dimFirst[0]
+        resultRowCount = dimSecond[1]
+
+        result = [[0 for col in range(resultColumnCount)] for row in range(resultRowCount)]
+
+        return result
 
     def operate(self, first, second, debugTrace=False):
         """
