@@ -1,6 +1,10 @@
 from matrixmath.Matrix import Matrix
 from matrixmath.EvenMatrix import EvenMatrix
 from matrixmath.Multiplication import Multiplication
+import pytest
+
+# Remark: This repositiory is just for testing python packages skills. In production we would use e.g. numpy
+TOLERANCE = 1e-9  # tolerance results from float multiplication without numpy.
 
 
 def test_scalar1_Matrix():
@@ -19,6 +23,7 @@ def test_scalar1_Matrix():
     matrix1 = Matrix(44, 45, defaultValue)
 
     matrix1.setValue(specialCell[0], specialCell[1], specialValue)
+    # TODO {Low} research for alternatives for Multiplication-Constructor. maybe sth like a static class?
     result = Multiplication().operate(scalar, matrix1)
 
     assert result.getDimension() == matrix1.getDimension(), (
@@ -27,9 +32,11 @@ def test_scalar1_Matrix():
     for row in range(result.rowCount):
         for col in range(result.columnCount):
             if row == specialCell[0] and col == specialCell[1]:
-                assert result.data[row][col] == scalar * specialValue, (" 1row {0} column {1}".format(row, col))
+                assert isCorrect(result.data[row][col], scalar * specialValue, TOLERANCE), (
+                    "row {0} column {1}".format(row, col))
             else:
-                assert result.data[row][col] == scalar * defaultValue, ("row {0} column {1}".format(row, col))
+                assert isCorrect(result.data[row][col], scalar * defaultValue, TOLERANCE), (
+                    "row {0} column {1}".format(row, col))
 
 
 def test_scalar1_EvenMatrix():
@@ -56,9 +63,11 @@ def test_scalar1_EvenMatrix():
     for row in range(result.rowCount):
         for col in range(result.columnCount):
             if row == specialCell[0] and col == specialCell[1]:
-                assert result.data[row][col] == scalar * specialValue, (" 1row {0} column {1}".format(row, col))
+                assert isCorrect(result.data[row][col], scalar * specialValue, TOLERANCE), (
+                    "row {0} column {1}".format(row, col))
             else:
-                assert result.data[row][col] == scalar * defaultValue, ("row {0} column {1}".format(row, col))
+                assert isCorrect(result.data[row][col], scalar * defaultValue, TOLERANCE), (
+                    "row {0} column {1}".format(row, col))
 
 
 def test_scalar2_Matrix():
@@ -85,9 +94,11 @@ def test_scalar2_Matrix():
     for row in range(result.rowCount):
         for col in range(result.columnCount):
             if row == specialCell[0] and col == specialCell[1]:
-                assert result.data[row][col] == scalar * specialValue, ("row {0} column {1}".format(row, col))
+                assert isCorrect(result.data[row][col], scalar * specialValue, TOLERANCE), (
+                    "row {0} column {1}".format(row, col))
             else:
-                assert result.data[row][col] == scalar * defaultValue, ("row {0} column {1}".format(row, col))
+                assert isCorrect(result.data[row][col], scalar * defaultValue, TOLERANCE), (
+                    "row {0} column {1}".format(row, col))
 
 
 def test_scalar2_EvenMatrix():
@@ -114,6 +125,64 @@ def test_scalar2_EvenMatrix():
     for row in range(result.rowCount):
         for col in range(result.columnCount):
             if row == specialCell[0] and col == specialCell[1]:
-                assert result.data[row][col] == scalar * specialValue, ("row {0} column {1}".format(row, col))
+                assert isCorrect(result.data[row][col], scalar * specialValue, TOLERANCE), (
+                    "row {0} column {1}".format(row, col))
             else:
-                assert result.data[row][col] == scalar * defaultValue, ("row {0} column {1}".format(row, col))
+                assert isCorrect(result.data[row][col], scalar * defaultValue, TOLERANCE), (
+                    "row {0} column {1}".format(row, col))
+
+
+def test_scalar3():
+    """
+    Testing scalar multiplication with multiple scalar factors
+        - Dimension of result shall be same
+        - resulting matrix get multiplied with scalar value
+    """
+
+    defaultValue = 7  # default cell value
+    specialValue = 10  # special cell value
+    specialCell = [2, 3]  # special cell
+
+    scalar1 = 3  # scalar factor1
+    scalar2 = 3.2  # scalar factor2
+    matrix1 = EvenMatrix(4, defaultValue)
+
+    matrix1.setValue(specialCell[0], specialCell[1], specialValue)
+    result = Multiplication().operate(scalar2, Multiplication().operate(scalar1, matrix1))
+
+    assert result.getDimension() == matrix1.getDimension(), (
+        "resultDimension {0} unequal matrix1Dimension {1}".format(result.getDimension(), matrix1.getDimension()))
+
+    for row in range(result.rowCount):
+        for col in range(result.columnCount):
+            if row == specialCell[0] and col == specialCell[1]:
+                assert isCorrect(result.data[row][col], scalar1 * scalar2 * specialValue, TOLERANCE), (
+                    "row {0} column {1}")
+            else:
+                assert isCorrect(result.data[row][col], scalar1 * scalar2 * defaultValue, TOLERANCE), (
+                    "row {0} column {1}")
+
+
+def test_general_Matrix():
+    matrix1 = Matrix(4, 8)
+
+    with pytest.raises(ValueError):
+        result = Multiplication().operate(matrix1, 2)
+
+
+def test_general_EvenMatrix():
+    matrix1 = EvenMatrix(4)
+
+    with pytest.raises(ValueError):
+        result = Multiplication().operate(matrix1, 2)
+
+
+def isCorrect(measured, expected, tolerance):
+    '''
+    deviation unavoidable with float values
+    :param measured:
+    :param expected:
+    :param tolerance:
+    :return: True (in tolerance) or False (otherside of tolerance)
+    '''
+    return abs(measured - expected) < tolerance
